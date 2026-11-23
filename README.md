@@ -4,7 +4,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ls-krds-ui&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DEFRA_ls-krds-ui)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ls-krds-ui&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DEFRA_ls-krds-ui)
 
-The LIS user profile and delegation frontend, a Node.js app built from the Core Delivery Platform (CDP) frontend template.
+The KRDS user profile and delegation frontend, a Node.js app built from the Core Delivery Platform (CDP) frontend template.
 
 - [Quick start](#quick-start)
 - [Requirements](#requirements)
