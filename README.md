@@ -4,8 +4,9 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ls-krds-ui&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DEFRA_ls-krds-ui)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ls-krds-ui&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DEFRA_ls-krds-ui)
 
-Core delivery platform Node.js Frontend Template.
+The LIS user profile and delegation frontend, a Node.js app built from the Core Delivery Platform (CDP) frontend template.
 
+- [Quick start](#quick-start)
 - [Requirements](#requirements)
   - [Node.js](#nodejs)
 - [Server-side Caching](#server-side-caching)
@@ -26,6 +27,36 @@ Core delivery platform Node.js Frontend Template.
   - [SonarCloud](#sonarcloud)
 - [Licence](#licence)
   - [About the licence](#about-the-licence)
+
+## Quick start
+
+From a fresh clone:
+
+```bash
+git clone https://github.com/DEFRA/ls-krds-ui.git
+cd ls-krds-ui
+nvm use
+npm ci
+npm run dev
+```
+
+Then open <http://localhost:3000>. The app has a home page, an about page and a cookies page.
+<http://localhost:3000/health> returns `200` with `{"message":"success"}`.
+
+Run the checks that pull requests run in GitHub Actions:
+
+```bash
+npm run format:check
+npm run lint
+npm test
+```
+
+On Windows, the npm scripts set environment variables with POSIX syntax (`AWS_EMF_ENVIRONMENT=Local ...`), which
+Command Prompt and PowerShell can't run. Point npm at Git Bash once:
+
+```bash
+npm config set script-shell "C:\\Program Files\\Git\\bin\\bash.exe"
+```
 
 ## Requirements
 
@@ -78,15 +109,17 @@ No additional proxy configuration is required in the service.
 Install application dependencies:
 
 ```bash
-npm install
+npm ci
 ```
+
+Use `npm install <package>` only when adding or updating a dependency.
 
 ### Git hooks
 
 Install git hooks (optional)
 
 ```bash
-npm run git:hooks
+npm run setup:husky
 ```
 
 ### Development
