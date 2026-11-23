@@ -70,6 +70,10 @@ describe('context and cache', () => {
               current: false,
               text: 'About',
               href: '/about'
+            },
+            {
+              text: 'Sign in',
+              href: '/auth/login'
             }
           ],
           serviceName: 'ls-krds-ui',
@@ -159,6 +163,10 @@ describe('context and cache', () => {
               current: false,
               text: 'About',
               href: '/about'
+            },
+            {
+              text: 'Sign in',
+              href: '/auth/login'
             }
           ],
           serviceName: 'ls-krds-ui',

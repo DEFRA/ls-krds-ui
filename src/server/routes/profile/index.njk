@@ -1,0 +1,54 @@
+{% extends 'layouts/page.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block content %}
+  {{ appHeading({
+    text: heading,
+    caption: user.displayName
+  }) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if currentRelationship %}
+        <p class="govuk-body" data-testid="acting-for">
+          You are acting for <strong>{{ currentRelationship.organisationName }}</strong>
+          as {{ currentRelationship.relationship }}.
+        </p>
+      {% endif %}
+
+      <h2 class="govuk-heading-m">Your details</h2>
+
+      {{ govukSummaryList({
+        attributes: { "data-testid": "profile-details" },
+        rows: [
+          { key: { text: "Name" }, value: { text: user.displayName } },
+          { key: { text: "Email" }, value: { text: user.email } },
+          { key: { text: "Defra ID user ID" }, value: { text: user.id } },
+          { key: { text: "Contact ID" }, value: { text: user.contactId or "Not provided" } },
+          { key: { text: "Level of assurance" }, value: { text: user.loa or "Not provided" } }
+        ]
+      }) }}
+    </div>
+  </div>
+
+  <h2 class="govuk-heading-m">Who you can act for</h2>
+
+  {% if relationshipRows.length %}
+    {{ govukTable({
+      attributes: { "data-testid": "relationships" },
+      caption: "Relationships from your Defra account",
+      captionClasses: "govuk-visually-hidden",
+      head: [
+        { text: "Organisation" },
+        { text: "Relationship" },
+        { text: "Roles" },
+        { text: "" }
+      ],
+      rows: relationshipRows
+    }) }}
+  {% else %}
+    <p class="govuk-body" data-testid="no-relationships">Your Defra account is not linked to any organisations.</p>
+  {% endif %}
+{% endblock %}
