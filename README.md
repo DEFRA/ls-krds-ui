@@ -139,8 +139,8 @@ in for it. Every route requires sign-in unless it sets `auth: false` or `auth: {
 1. Copy the local settings: `cp .env.example .env`
 2. Start the stub (built from GitHub on first run): `docker compose up -d --wait cdp-defra-id-stub`
 3. Register the test users: `npm run stub:seed`
-4. Start the app on the host: `npm run dev` (on Windows without a POSIX shell for npm scripts,
-   run `node --env-file-if-exists=.env ./src`)
+4. Start the app on the host: `npm run dev` (on Windows, see the script-shell note in
+   [Quick start](#quick-start))
 5. Open <http://localhost:3000/profile>, pick a user at the stub, and you land on your profile
 
 The stub must be reached at `http://localhost:3200` by both your browser and the app, because it
@@ -149,28 +149,37 @@ compose.
 
 The stub keeps users in memory: re-run `npm run stub:seed` after restarting it. Test users:
 
-| Email                    | Relationships                                         |
-| ------------------------ | ----------------------------------------------------- |
-| `individual@example.com` | None                                                  |
-| `keeper@example.com`     | One business (picked automatically)                   |
-| `agent@example.com`      | Three businesses (the stub asks which to act for)     |
-| `delegate@example.com`   | Delegate on Oakfield Farm                             |
-| `inactive@example.com`   | One relationship with an inactive role (status `1`)   |
+| Email                    | Relationships                                       |
+| ------------------------ | --------------------------------------------------- |
+| `individual@example.com` | None                                                |
+| `keeper@example.com`     | One business (picked automatically)                 |
+| `agent@example.com`      | Three businesses (the stub asks which to act for)   |
+| `delegate@example.com`   | Delegate on Oakfield Farm                           |
+| `inactive@example.com`   | One relationship with an inactive role (status `1`) |
+
+To add a test user, add an entry to `users` in
+[scripts/seed-stub-users.js](./scripts/seed-stub-users.js) with a new fixed `userId` and
+`email`, and any relationships, then re-run `npm run stub:seed`. A `roleStatus` of `3` is
+active and `1` is inactive.
+
+To seed the CDP dev stub instead, set its base URL first:
+`STUB_BASE_URL=https://cdp-defra-id-stub.dev.cdp-int.defra.cloud/cdp-defra-id-stub npm run stub:seed`.
+Registrations there expire after 3 days.
 
 `OIDC_REQUIRE_NONCE=false` in `.env.example` works around a stub bug: its ID tokens carry no
 nonce. Never set it against real Defra ID.
 
-| Variable                            | Description                                                         |
-| ----------------------------------- | ------------------------------------------------------------------- |
-| `APP_BASE_URL`                      | Public origin of this service, for the callback and sign-out URLs   |
-| `OIDC_DISCOVERY_URL`                | Defra ID (or stub) discovery document URL                           |
-| `OIDC_CLIENT_ID`                    | Client id from Defra ID                                             |
-| `OIDC_CLIENT_SECRET`                | Client secret from Defra ID (sensitive)                             |
-| `OIDC_SERVICE_ID`                   | Defra ID service id; checked against the token when both are set    |
-| `OIDC_SCOPE`                        | Scopes to request (default `openid`)                                |
-| `OIDC_REDIRECT_PATH`                | Callback path registered with Defra ID (default `/sso`)             |
-| `OIDC_REQUIRE_NONCE`                | Reject ID tokens without a nonce (default `true`)                   |
-| `OIDC_SIGN_OUT_FORM_ACTION_ORIGINS` | Extra origins Defra ID sign-out redirects through, for the CSP      |
+| Variable                            | Description                                                       |
+| ----------------------------------- | ----------------------------------------------------------------- |
+| `APP_BASE_URL`                      | Public origin of this service, for the callback and sign-out URLs |
+| `OIDC_DISCOVERY_URL`                | Defra ID (or stub) discovery document URL                         |
+| `OIDC_CLIENT_ID`                    | Client id from Defra ID                                           |
+| `OIDC_CLIENT_SECRET`                | Client secret from Defra ID (sensitive)                           |
+| `OIDC_SERVICE_ID`                   | Defra ID service id; checked against the token when both are set  |
+| `OIDC_SCOPE`                        | Scopes to request (default `openid`)                              |
+| `OIDC_REDIRECT_PATH`                | Callback path registered with Defra ID (default `/sso`)           |
+| `OIDC_REQUIRE_NONCE`                | Reject ID tokens without a nonce (default `true`)                 |
+| `OIDC_SIGN_OUT_FORM_ACTION_ORIGINS` | Extra origins Defra ID sign-out redirects through, for the CSP    |
 
 ### Production
 
