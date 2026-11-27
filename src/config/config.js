@@ -251,6 +251,74 @@ export const config = convict({
       }
     }
   },
+  appBaseUrl: {
+    doc: 'Public origin of this service, used to build the sign-in callback and post sign-out URLs',
+    format: String,
+    default: 'http://localhost:3000',
+    env: 'APP_BASE_URL'
+  },
+  auth: {
+    oidc: {
+      discoveryUrl: {
+        doc: 'OIDC discovery document URL for Defra ID, or the Defra ID stub in local and dev',
+        format: String,
+        default:
+          'http://localhost:3200/cdp-defra-id-stub/.well-known/openid-configuration',
+        env: 'OIDC_DISCOVERY_URL'
+      },
+      clientId: {
+        doc: 'OIDC client id issued by Defra ID (the stub accepts its own fixed id)',
+        format: String,
+        default: '63983fc2-cfff-45bb-8ec2-959e21062b9a',
+        env: 'OIDC_CLIENT_ID'
+      },
+      clientSecret: {
+        doc: 'OIDC client secret issued by Defra ID (the stub uses test_value)',
+        format: String,
+        nullable: true,
+        default: null,
+        env: 'OIDC_CLIENT_SECRET',
+        sensitive: true
+      },
+      serviceId: {
+        doc: 'Defra ID service id, sent on sign-in and checked against the token when both are present',
+        format: String,
+        nullable: true,
+        default: null,
+        env: 'OIDC_SERVICE_ID'
+      },
+      scope: {
+        doc: 'Space-separated scopes to request; openid is always included',
+        format: String,
+        default: 'openid',
+        env: 'OIDC_SCOPE'
+      },
+      redirectPath: {
+        doc: 'Sign-in callback path; must be registered with Defra ID',
+        format: String,
+        default: '/sso',
+        env: 'OIDC_REDIRECT_PATH'
+      },
+      signOutFormActionOrigins: {
+        doc: 'Extra origins the sign-out form may redirect through (Defra ID uses its own domain then b2clogin.com); the discovery URL origin is always allowed',
+        format: Array,
+        default: [],
+        env: 'OIDC_SIGN_OUT_FORM_ACTION_ORIGINS'
+      },
+      requireNonce: {
+        doc: 'Reject ID tokens that carry no nonce. Set false only for the CDP Defra ID stub, which omits it; a wrong nonce is always rejected',
+        format: Boolean,
+        default: true,
+        env: 'OIDC_REQUIRE_NONCE'
+      },
+      timeoutMs: {
+        doc: 'Timeout for calls to the identity provider in milliseconds',
+        format: 'nat',
+        default: 10000,
+        env: 'OIDC_TIMEOUT_MS'
+      }
+    }
+  },
   googleAnalytics: {
     googleTagManagerKey: {
       doc: 'Google Tag Manager container ID (e.g. GTM-XXXXXXXX)',

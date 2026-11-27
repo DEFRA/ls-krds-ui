@@ -36,6 +36,42 @@ services:
       retries: 3
       start_period: 30s
 
+  # Stand-in for Defra ID (Defra Customer Identity) for local sign-in.
+  # Built from DEFRA/cdp-defra-id-stub, pinned to a commit. Users and sessions
+  # are held in memory, so restarting the container wipes registered users:
+  # re-run `npm run stub:seed` afterwards.
+  # It must be reached at http://localhost:3200 by both the browser and this
+  # app (run the app on the host with `npm run dev`), because the stub builds
+  # its discovery URLs and token issuer from that address.
+  # Uses the development stage: the stub's production stage fails to build
+  # at this commit (its `npm ci --omit=dev` step errors).
+  cdp-defra-id-stub:
+    build:
+      context: https://github.com/DEFRA/cdp-defra-id-stub.git#3c93db90487f58d9c277458568af0014da114f53
+      target: development
+    ports:
+      - '3200:3200'
+    environment:
+      PORT: 3200
+      NODE_ENV: development
+      APP_BASE_URL: http://localhost:3200
+      REGISTRATIONS_STORE_ENGINE: memory
+      SESSION_CACHE_ENGINE: memory
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:3200/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - cdp-tenant
+
   ################################################################################
 
   your-frontend:
